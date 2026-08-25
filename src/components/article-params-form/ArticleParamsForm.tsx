@@ -25,21 +25,24 @@ type ArticleParamsFormProps = {
 export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState);
-	const [isOpen, setIsOpen] = useState(false);
-	const rootRef = useRef<HTMLDivElement>(null);
+	const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+	const formContainerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isSettingsOpen) return;
 		const handleClick = (e: MouseEvent) => {
-			if (e.target instanceof Node && !rootRef.current?.contains(e.target)) {
-				setIsOpen(false);
+			if (
+				e.target instanceof Node &&
+				!formContainerRef.current?.contains(e.target)
+			) {
+				setIsSettingsOpen(false);
 			}
 		};
 		window.addEventListener('mousedown', handleClick);
 		return () => {
 			window.removeEventListener('mousedown', handleClick);
 		};
-	}, [isOpen]);
+	}, [isSettingsOpen]);
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -56,13 +59,17 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 		setFormState((prevState) => ({ ...prevState, [field]: value }));
 
 	return (
-		<div ref={rootRef}>
+		<div ref={formContainerRef}>
 			<ArrowButton
-				isOpen={isOpen}
-				onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
+				isOpen={isSettingsOpen}
+				onClick={() =>
+					setIsSettingsOpen((prevIsSettingsOpen) => !prevIsSettingsOpen)
+				}
 			/>
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isSettingsOpen,
+				})}>
 				<form
 					className={styles.form}
 					onSubmit={handleSubmit}
