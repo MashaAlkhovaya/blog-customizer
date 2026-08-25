@@ -1,19 +1,15 @@
-import { CSSProperties, useState } from 'react';
-import clsx from 'clsx';
+import { useState } from 'react';
+import type { CSSProperties } from 'react';
 
 import { Article } from '../article/Article';
 import { ArticleParamsForm } from '../article-params-form';
 import { defaultArticleState } from 'src/constants/articleProps';
-import type { ArticleStateType } from 'src/constants/articleProps';
 
 import styles from './app.module.scss';
 
 export const App = () => {
 	const [appliedState, setAppliedState] = useState(defaultArticleState);
 
-	const handleApply = (newState: ArticleStateType) => {
-		setAppliedState(newState);
-	};
 	return (
 		<main
 			className={clsx(styles.main)}
@@ -26,7 +22,7 @@ export const App = () => {
 					'--bg-color': appliedState.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm onApply={handleApply} />
+			<ArticleParamsForm onApply={setAppliedState} />
 			<Article />
 		</main>
 	);
