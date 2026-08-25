@@ -2,11 +2,9 @@ import { CSSProperties, useState } from 'react';
 import clsx from 'clsx';
 
 import { Article } from '../article/Article';
-import { ArticleParamsForm } from '../article-params-form/ArticleParamsForm';
-import {
-	ArticleStateType,
-	defaultArticleState,
-} from './../../constants/articleProps';
+import { ArticleParamsForm } from '../article-params-form';
+import { defaultArticleState } from 'src/constants/articleProps';
+import type { ArticleStateType } from 'src/constants/articleProps';
 
 import styles from './app.module.scss';
 
