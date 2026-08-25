@@ -1,8 +1,7 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { FormEvent } from 'react';
-import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 import clsx from 'clsx';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
@@ -29,11 +28,18 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 
-	useOutsideClickClose({
-		isOpen,
-		rootRef,
-		onChange: setIsOpen,
-	});
+	useEffect(() => {
+		if (!isOpen) return;
+		const handleClick = (e: MouseEvent) => {
+			if (e.target instanceof Node && !rootRef.current?.contains(e.target)) {
+				setIsOpen(false);
+			}
+		};
+		window.addEventListener('mousedown', handleClick);
+		return () => {
+			window.removeEventListener('mousedown', handleClick);
+		};
+	}, [isOpen]);
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
